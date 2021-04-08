@@ -1,18 +1,40 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <Ticket v-for="event in events" :key="event.id" :event="event"></Ticket>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+
+import Ticket from "@/components/Ticket.vue";
+import TicketService from "@/Services/TicketService";
 
 export default {
+  data() {
+    return {
+      events: null,
+    };
+  },
+  created() {
+    TicketService.getEvents()
+      .then((response) => {
+        this.events = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+
   name: "Home",
   components: {
-    HelloWorld,
+    Ticket,
   },
 };
 </script>
+<style>
+a {
+  text-decoration: none;
+}
+</style>
